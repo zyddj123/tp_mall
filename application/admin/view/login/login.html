@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="ThemeBucket">
-    <link rel="shortcut icon" href="#" type="image/png">
+    <!-- <link rel="shortcut icon" href="#" type="image/png"> -->
 
     <title>Login</title>
 
@@ -23,16 +23,16 @@
 
 <div class="container">
 
-    <form class="form-signin" action="index.html">
+    <form id="login_form" class="form-signin" action="#" method="post">
         <div class="form-signin-heading text-center">
-            <h1 class="sign-title">登录</h1>
+            <h1 class="sign-title">后台管理系统</h1>
         </div>
         <div class="login-wrap">
-            <input type="text" class="form-control" placeholder="用户名" autofocus>
-            <input type="password" class="form-control" placeholder="密码">
+            <input type="text" class="form-control" name="uname" placeholder="用户名" autofocus>
+            <input type="password" class="form-control" name="upwd" placeholder="密码">
 
             <button class="btn btn-lg btn-login btn-block" type="submit">
-                <i class="fa fa-check"></i>
+                <i class="fa fa-check"></i>登录
             </button>
         </div>
     </form>
@@ -44,9 +44,47 @@
 <!-- Placed js at the end of the document so the pages load faster -->
 
 <!-- Placed js at the end of the document so the pages load faster -->
-<script src="/static/admin/js/jquery-1.10.2.min.js"></script>
+<script src="/static/admin/js/jquery-3.3.1.js"></script>
+<!-- <script src="http://static.runoob.com/assets/jquery-validation-1.14.0/lib/jquery.js"></script> -->
+<!-- <script src="http://static.runoob.com/assets/jquery-validation-1.14.0/dist/jquery.validate.min.js"></script> -->
+<script src="/static/admin/js/jquery.form.js"></script> 
 <script src="/static/admin/js/bootstrap.min.js"></script>
 <script src="/static/admin/js/modernizr.min.js"></script>
+<script src="/static/admin/js/jquery.validate.min.js"></script>
 
+<script>
+    $('#login_form').validate({
+        rules:{
+            uname:"required",
+            upwd:"required"
+        },
+        messages:{
+            uname:"用户名不能为空",
+            upwd:"密码不能为空"
+        },
+        submitHandler: (form)=>{      
+            $(form).ajaxSubmit({
+                url:"../../admin/Login/doLogin",
+                type: 'get',
+                dataType: 'jsonp',
+                success:(e)=>{
+                    if(e.sta===1){
+                        //登录成功跳转
+                        window.location.href = ''
+                    }else if(e.sta===2){
+                        //用户不存在
+                    }else if(e.sta===3){
+                        //密码错误
+                    }else if(e.sta===4){
+                        //您已被冻结
+                    }
+                },
+                error:(err)=>{
+                    console.log(err);
+                }
+            });     
+        }
+    });
+</script>
 </body>
 </html>
