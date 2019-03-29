@@ -22,4 +22,9 @@ return [
     'prefix' => '',
     // 缓存有效期 0表示永久缓存
     'expire' => 0,
+    // 'type'   => 'Redis',
+    // 'host'   => '127.0.0.1',
+    // 'port'   => '6379',
+    // 'password' => '',
+    // 'timeout'=> 7200
 ];

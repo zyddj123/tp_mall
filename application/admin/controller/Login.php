@@ -4,10 +4,18 @@ namespace app\admin\controller;
 
 use think\Controller;
 use think\View;
-// use think\Request
+// use think\Cache;
+use think\cache\driver\Redis;
+use extend\Unit;
 
 class Login extends Controller
 {
+    public function _initialize()
+    {
+        //登录验证
+        
+    }
+
     public function login()
     {
         return view('login');
@@ -28,9 +36,12 @@ class Login extends Controller
             $ret['mes'] = '用户不存在';
         }else{
             if($data['upwd']===md5($upwd)){
-                if($data['status']===1){
+                if($data['status']==1){
                     $ret['sta'] = 1;
                     $ret['mes'] = '登录成功';
+                    $key = 'admin_'.$uname;
+                    $redis = new Redis();
+                    $redis->set($key,['id'=>$data['id'],'uname'=>$data['uname'],'uimg'=>$data['uimg']]);
                 }else{
                     $ret['sta'] = 4;
                     $ret['mes'] = '您已被冻结，请联系管理员';
