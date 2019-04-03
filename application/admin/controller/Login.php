@@ -5,6 +5,7 @@ namespace app\admin\controller;
 use think\Controller;
 use think\cache\driver\Redis;
 use Aes;
+use Unit;
 
 class Login extends Controller
 {
@@ -21,6 +22,7 @@ class Login extends Controller
 
     public function doLogin()
     {
+        // var_dump($_GET);die;
         $jsonp = input('get.callback'); //get接收jsonp自动生成的函数名
         $uname = input('get.uname');
         $upwd = input('get.upwd');
@@ -37,21 +39,14 @@ class Login extends Controller
         }else{
             if($info['upwd']===md5($upwd)){
                 if($info['status']==1){
-                    $aes = new Aes('zyddj123');
-                    $tokenValue = [
-                        'id'=>$info['id'],
-                        'uname'=>$info['uname'],
-                        'loginTime'=>time()
-                    ];
-                    // var_dump(implode(" ",$tokenValue));die; //string(23) "1 superadmin 1554085530"
-                    $token = $aes->encrypt(implode(" ",$tokenValue));
-                    $key = 'admin_'.$info['id'];
-                    $redis = new Redis();
-                    if($redis->set($key,$token)){
+                    //设置redis过期时间
+                    $flag = Unit::setRedisExpire($info);
+            
+                    if($flag){
                         $ret['sta'] = 1;
                         $ret['mes'] = '登录成功';
                         $ret['data'] = [
-                            'token' => $token,
+                            'token' => $flag,
                             'info' => [
                                 'uname' => $info['uname'],
                                 'uimg' => $info['uimg']

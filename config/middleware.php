@@ -14,5 +14,5 @@
 // +----------------------------------------------------------------------
 return [
     // 默认中间件命名空间
-    'AdminLoginCheck' => app\http\middleware\Check::class
+    'AdminLoginCheck' => app\http\middleware\AdminLoginCheck::class
 ];
